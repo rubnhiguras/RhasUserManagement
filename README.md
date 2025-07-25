@@ -35,9 +35,9 @@
    sudo usermod -aG docker $USER
    sudo systemctl enable docker
 
-2. **Desplegar**:
-    ``` .\boot.dev.sh
-    Para restaurar la base de datos:
-    ``` .\reset.dev.sh 
+3. **Desplegar**:
+    ```
+       .\boot.dev.sh
+       .\reset.dev.sh 
       
    
