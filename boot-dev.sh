@@ -18,6 +18,7 @@ clean_container() {
 }
 
 # Limpiar contenedores
+clean_container react-pwa-container
 clean_container springboot-app
 clean_container postgres
 
@@ -61,9 +62,8 @@ echo " Generando claves de despliegue y encriptación..."
 echo "🔄🚀 Lanzando backend..."
 
 cd ./user-management-backend
-# Ejecutar el contenedor de Spring Boot
-docker buildx create --use
-docker build -t usuariomanagement/user-management-backend:latest .
+# Ejecutar el contenedor de Spring Boot 
+docker build --no-cache -t usuariomanagement/user-management-backend:latest .
 docker run -d --name springboot-app --network usermanagementnetwork \
   -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/usermanagementdb \
   -e SPRING_DATASOURCE_USERNAME=admin \
@@ -75,16 +75,22 @@ docker run -d --name springboot-app --network usermanagementnetwork \
   -p 5005:5005 \
   usuariomanagement/user-management-backend:latest
 
+timeout 120 bash -c 'until curl -s http://localhost:8080/actuator/health | grep -q '"'"'\"status\":\"UP\"'"'"'; do sleep 2; echo "Esperando a que el servicio esté listo..."; done' && echo "✅ Health check: UP" || (echo "❌ El servicio no está saludable después de 120 segundos"; exit 1)
 echo "✅🚀 Backend levantado correctamente."
 echo "🔄🚀 Lanzando frontend..."
 # Ejecutar el contenedor de front-end
-cd ../user-management-frontend
+cd ../user-management-frontend 
+rm -rf node_modules package-lock.json
+# 1. Limpiar cachés previas
+docker builder prune -f
+
+# 2. Construir con BuildKit habilitado
+docker build --no-cache -t usariomanagement/react-pwa-app:latest .
+
+# 3. Ejecutar el contenedor
+docker run -d --name react-pwa-container -p 80:3000 --network usermanagementnetwork usariomanagement/react-pwa-app:latest
 
 echo "✅🚀 Frontend levantado correctamente."
-
-docker build -t user-management-frontend .
-docker run -d -p 3000:80 --name user-frontend user-management-frontend
-
 
 echo "✅🚀 Todo levantado correctamente."
 cd ..

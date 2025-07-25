@@ -1,6 +1,6 @@
 {
-  "short_name": "React App User Management",
-  "name": "React App User Management",
+  "short_name": "My PWA",
+  "name": "My Progressive Web App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,13 +8,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo_p_q.svg",
-      "type": "image/svg",
+      "src": "logo192.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo_p_q.svg",
-      "type": "image/svg",
+      "src": "logo512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
