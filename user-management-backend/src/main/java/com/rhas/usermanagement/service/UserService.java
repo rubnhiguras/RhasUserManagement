@@ -3,14 +3,12 @@ package com.rhas.usermanagement.service;
 import com.rhas.usermanagement.dto.DTO;
 import com.rhas.usermanagement.entities.User;
 import com.rhas.usermanagement.repositories.UserRepository;
-import com.sun.security.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +21,9 @@ public class UserService {
      * Get currently authenticated user
      */
     public DTO.UserResponse getCurrentUser() {
-        UserPrincipal currentUser = getCurrentUserPrincipal();
-        User user = userRepository.findByEmail(currentUser.getName())
-                .orElseThrow(() -> new OpenApiResourceNotFoundException(currentUser.getName()));
+        org.springframework.security.core.userdetails.User currentUser = getCurrentUserPrincipal();
+        User user = userRepository.findByEmail(currentUser.getUsername())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException(currentUser.getUsername()));
 
         return mapUserToUserResponse(user);
     }
@@ -45,9 +43,9 @@ public class UserService {
      * Update user profile
      */
     public DTO.UserResponse updateUser(DTO.UserResponse userResponse) {
-        UserPrincipal currentUser = getCurrentUserPrincipal();
-        User user = userRepository.findByEmail(currentUser.getName())
-                .orElseThrow(() -> new OpenApiResourceNotFoundException(currentUser.getName()));
+        org.springframework.security.core.userdetails.User currentUser = getCurrentUserPrincipal();
+        User user = userRepository.findByEmail(currentUser.getUsername())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException(currentUser.getUsername()));
 
         user.setName(userResponse.name());
         user.setSurname(userResponse.surname());
@@ -61,9 +59,9 @@ public class UserService {
     /**
      * Helper method to get current authenticated user
      */
-    private UserPrincipal getCurrentUserPrincipal() {
+    private org.springframework.security.core.userdetails.User getCurrentUserPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (UserPrincipal) authentication.getPrincipal();
+        return (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
     }
 
     /**
@@ -77,16 +75,18 @@ public class UserService {
                 user.getEmail(),
                 user.getPhone(),
                 user.getAvatarUrl(),
+                user.isDisabled(),
                 user.getRoles().stream().map(role ->
                         new DTO.RoleResponse(
                                 role.getId(),
                                 role.getName(),
-                                role.getContext(),
+                                new DTO.ContextResponse(role.getContext().getId(), role.getName(), role.getDescription()),
                                 role.getDescription(),
                                 role.getPermisos().stream().map(permission ->
                                         new DTO.PermissionResponse(
                                                 permission.getId(),
                                                 permission.getName(),
+                                                new DTO.ContextResponse(permission.getContext().getId(), permission.getName(), permission.getDescription()),
                                                 permission.getDescription()
                                         )
                                 ).collect(Collectors.toSet())

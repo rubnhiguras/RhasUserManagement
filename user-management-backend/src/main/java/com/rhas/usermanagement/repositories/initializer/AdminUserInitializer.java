@@ -1,6 +1,7 @@
 package com.rhas.usermanagement.repositories.initializer;
 
-import com.rhas.usermanagement.UserManagementApplication;
+import com.rhas.usermanagement.entities.Context;
+import com.rhas.usermanagement.repositories.ContextRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ import com.rhas.usermanagement.entities.Role;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+import static com.rhas.usermanagement.dto.DTO.*;
 
 @Component
 @RequiredArgsConstructor
@@ -32,47 +35,60 @@ public class AdminUserInitializer {
     private final PermissionRepository permisoRepository;
     private final RoleRepository roleRepository;
 
+    private final ContextRepository contextRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
-    public void initAdminUser() {
-        logger.info("Init base de datos");
-        // Verificar si ya existe el usuario admin
+    @Transactional
+    public void initDb() {
         if (userRepository.findByEmail(adminEmail).isEmpty()) {
-            logger.info("Init permisos y roles");
-            // Crear permisos de administrador y roles
-            Permission permisoAdmin = Permission.builder()
-                    .name("FULL_ACCESS")
-                    .description("Acceso total al sistema")
-                    .build();
+            logger.info("Init base de datos");
+
+            Context contextAdmin = contextRepository.save(
+                    Context.builder()
+                            .name(CONTEXT_SYSTEM)
+                            .description("Contexto de administración del sistema")
+                            .build()
+            );
+
+            Permission permisoAdmin = permisoRepository.save(
+                    Permission.builder()
+                            .name(PERMISSION_FULL_ACCESS)
+                            .description("Acceso total")
+                            .context(contextAdmin)
+                            .build()
+            );
+
+            Permission permisoUsuario = permisoRepository.save(
+                    Permission.builder()
+                            .name(PERMISSION_USER_ACCESS)
+                            .description("Acceso solo a datos propios")
+                            .context(contextAdmin)
+                            .build()
+            );
 
             Role roleAdmin = Role.builder()
-                    .name("ROLE_ADMIN")
-                    .description("Usuario administrador general")
+                    .name(ROLE_ADMIN_USER)
+                    .description("Usuario administrador")
+                    .context(contextAdmin)
                     .build();
+            roleAdmin.addPermisos(permisoAdmin); // relación añadida
+            roleAdmin = roleRepository.save(roleAdmin);
+            roleAdmin = roleRepository.findByName(roleAdmin.getName()).orElseThrow();
 
-            roleAdmin.addPermisos(permisoAdmin);
-
-            // Crear usuario administrador
             User admin = User.builder()
-                .name("Administrador")
-                .phone("+1 (212) 555-1234")
-                .email(adminEmail)
-    //            .passwordHash(passwordEncoder.encode(adminPassword)) // Siempre codificar la contraseña
-                .passwordHash(adminPassword)
-                .avatarUrl("https://e7.pngegg.com/pngimages/713/136/png-clipart-computer-icons-system-administrator-id-computer-network-heroes.png")
-                .build();
-
-            admin.addRol(roleAdmin);
-
-            logger.info("Init permisos y roles Guardando");
-
-            permisoRepository.save(permisoAdmin);
-            roleRepository.save(roleAdmin);
+                    .name("Administrador")
+                    .phone("+1 (212) 555-1234")
+                    .email(adminEmail)
+                    .passwordHash(adminPassword)
+                    .avatarUrl("https://e7.pngegg.com/pngimages/713/136/png-clipart-computer-icons-system-administrator-id-computer-network-heroes.png")
+                    .disabled(false)
+                    .build();
+            admin.addRol(roleAdmin); // relación añadida
             userRepository.save(admin);
 
             logger.info("Init permisos y roles HECHO");
-
         }
     }
 }

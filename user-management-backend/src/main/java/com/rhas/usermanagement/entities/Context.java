@@ -1,6 +1,10 @@
 package com.rhas.usermanagement.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,19 +12,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "contexts")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Permission {
+public class Context {
     @Id @GeneratedValue
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "context_id", referencedColumnName = "id")
-    private Context context; // Ej: IT, Deportes
-    private String description;
+    private String description;// Ej: IT, Deportes
 }

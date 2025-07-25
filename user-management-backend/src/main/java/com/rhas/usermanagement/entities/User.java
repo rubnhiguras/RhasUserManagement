@@ -26,17 +26,21 @@ public class User {
     private String email;
     private String passwordHash;
     private String avatarUrl;
+    private boolean disabled;
     // relaciones con roles y permisos
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "usuario_rol",
-        joinColumns = @JoinColumn(name = "users.id"),
-        inverseJoinColumns = @JoinColumn(name = "roles.id")
+        joinColumns = @JoinColumn(name = "users_id"),
+        inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
     private Set<Role> roles = new HashSet<>();
 
     public boolean addRol(Role newRole){
-        return roles != null ? roles.add(newRole) : new HashSet<>().add(newRole);
+        if (this.roles == null){
+            this.roles = new HashSet<>();
+        }
+        return this.roles.add(newRole);
     }
 }

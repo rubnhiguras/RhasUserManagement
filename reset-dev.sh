@@ -70,7 +70,9 @@ docker run -d --name springboot-app --network usermanagementnetwork \
   -e SPRING_DATASOURCE_PASSWORD=admin123 \
   -e SPRING_PROFILES_ACTIVE=dev \
   -e JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n' | tr -d '+/' | head -c 64) \
+  -e JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005" \
   -p 8080:8080 \
+  -p 5005:5005 \
   usuariomanagement/user-management-backend:latest
 
 echo "✅🚀 Backend levantado correctamente."

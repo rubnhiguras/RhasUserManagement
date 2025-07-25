@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UserManagementApplication {
     private static final Logger logger = LoggerFactory.getLogger(UserManagementApplication.class);
     public static void main(String[] args) {
-        logger.info("[USER MANAGEMENT BACKEND LOGS] 🚀 Iniciando User Management App...");
+        logger.info("🚀 Iniciando User Management App...");
         SpringApplication.run(UserManagementApplication.class, args);
     }
 }
