@@ -31,12 +31,13 @@
 
 2. **Instalar WSL o Linux con Docker**:  
    ```sudo apt update && sudo apt upgrade -y
-sudo apt install -y docker.io 
-sudo usermod -aG docker $USER
-sudo systemctl enable docker
+   sudo apt install -y docker.io 
+   sudo usermod -aG docker $USER
+   sudo systemctl enable docker
 
 2. **Desplegar**:
-    ```.\boot.dev.sh
-    Para restaurar la base de datos: reset-dev.sh
+    ``` .\boot.dev.sh
+    Para restaurar la base de datos:
+    ``` .\reset.dev.sh 
       
    
