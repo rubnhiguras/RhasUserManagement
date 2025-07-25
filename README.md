@@ -29,13 +29,14 @@
    git clone https://github.com/rubnhiguras/RhasUserManagement.git
    cd RhasUserManagement
 
-2. **Instalar WSL o Linux con Docker**:  
+2. **Instalar WSL o Linux con Docker**:
+   Al instalar WSL o disponer de una máquina unix/linux, ejecutar los siguientes comandos:
    ```sudo apt update && sudo apt upgrade -y
    sudo apt install -y docker.io 
    sudo usermod -aG docker $USER
    sudo systemctl enable docker
 
-3. **Desplegar**:
+4. **Desplegar**:
     ```
        .\boot.dev.sh
        .\reset.dev.sh 
