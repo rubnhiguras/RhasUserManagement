@@ -1,20 +1,20 @@
 {
-  "short_name": "React App User Management",
-  "name": "React App User Management",
+  "short_name": "App User Management",
+  "name": "App User Management",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo_p_q.svg",
-      "type": "image/svg",
+      "src": "/logo192x192.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo_p_q.svg",
-      "type": "image/svg",
+      "src": "/logo512x512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
