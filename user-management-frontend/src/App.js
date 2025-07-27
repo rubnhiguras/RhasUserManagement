@@ -8,10 +8,23 @@ import { UserProfile } from './components/UserProfile';
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [view, setView] = useState('login');
+  const [welcome, setWelcome] = useState(true);
+
+  const handleWelcomeAccess = () => {
+    setWelcome(!welcome);
+  }
 
   const handleLogin = (newToken) => {
     setToken(newToken);
     setView('profile');
+  };
+
+  const handleLoginWoToken = () => { 
+    setView('login');
+  };
+
+  const handleRegisterWoToken = () => { 
+    setView('register');
   };
 
   const handleRegister = (newToken) => {
@@ -34,24 +47,21 @@ const App = () => {
   if (!token) {
     return (
       <div className="App">
-        
-        <div className="App-background">
-          <h3>App User Management</h3>
+        {welcome ? (<div className="App-background">
+          <h3>¡Bienvenidx a App User Management!</h3>
           <img src={logo} className="App-logo" alt="logo" />
+          <h3><button className="logout-button" onClick={handleWelcomeAccess}>Comenzar</button></h3>
+        </div>) : ( <div className="App-background">
           {view === 'login' ? (
             <>
-              <LoginForm onLogin={handleLogin} />
-              <p>Don't have an account? <button 
-              className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white" onClick={() => setView('register')}>Register</button></p>
+              <LoginForm onLogin={handleLogin} handleRegisterWoToken={handleRegisterWoToken} />
             </>
           ) : (
             <>
-              <RegisterForm onRegister={handleRegister} />
-              <p>Already have an account? <button 
-              className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white" onClick={() => setView('login')}>Login</button></p>
+              <RegisterForm onRegister={handleRegister} handleLoginWoToken={handleLoginWoToken} /> 
             </>
           )}
-        </div>
+        </div>)}
       </div>
     );
   }

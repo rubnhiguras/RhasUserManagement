@@ -22,6 +22,32 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>App User Management</title>
+    <style>
+      footer{
+        position: fixed;
+        right: 0; 
+        bottom: 0; 
+        text-align: center; 
+        display: inline; 
+        padding: 0 1rem 0.3rem 1rem;
+        font-size: 0.7rem; 
+        overflow: hidden;
+      }
+    </style>
+    <script>
+      const manifest = './manifest.json';
+      fetch(manifest).then(response => {
+          return response.json();
+      }).then(data => {
+          if (data.version) {
+              document.getElementById('numVersion').textContent = 
+                  `${data.version}`;
+          } else {
+              document.getElementById('numVersion').textContent = 
+                  'NONE';
+          }
+      })
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -36,4 +62,7 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <footer>
+        v.<i id="numVersion"></i>&nbsp;&nbsp;<i>&#169;</i>2025&nbsp;
+  </footer>
 </html>

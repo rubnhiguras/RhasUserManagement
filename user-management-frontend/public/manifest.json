@@ -1,6 +1,7 @@
 {
   "short_name": "App User Management",
   "name": "App User Management",
+  "version": "0.1.0",
   "icons": [
     {
       "src": "/favicon.ico",

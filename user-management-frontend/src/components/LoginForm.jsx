@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './styles.css';
 import axios from 'axios';
 
-export const LoginForm = ({ onLogin }) => {
+export const LoginForm = ({ onLogin, handleRegisterWoToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,30 +21,51 @@ export const LoginForm = ({ onLogin }) => {
   };
 
   return (
-     <div className="bg-[#282c34] min-h-screen flex flex-col items-center justify-center">
-      <form onSubmit={handleLogin} className="bg-gray-900 p-8 rounded-lg shadow-md w-80 space-y-4">
-        <h2 className="text-white text-2xl font-semibold text-center">Login</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="p-2 w-full bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="p-2 w-full bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
-        />
-        <button type="submit" className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
-          Login
+     <div className="profile-container" style={{ maxWidth: '400px', marginTop: '50px' }}>
+      <form onSubmit={handleLogin} className="login-form">
+        <h2>Iniciar Sesión</h2>
+        
+        <div className="profile-info">
+          <div className="input-group">
+            <label>
+              <strong>Email:</strong>
+              <input
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="login-input"
+              />
+            </label>
+          </div>
+          
+          <div className="input-group">
+            <label>
+              <strong>Contraseña:</strong>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="login-input"
+              />
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" className="logout-button" style={{ width: '100%' }}>
+          Acceder
         </button>
-        {error && <p className="text-red-400 text-sm text-center mt-2">{error}</p>}
+
+        {error && <p className="error-message">{error}</p>}
+
+        
       </form>
+      <p className="text-center mt-4" style={{ color: '#61dafb' }}>
+          ¿No tienes cuenta? <br/><button onClick={handleRegisterWoToken} className="logout-button" style={{backgroundColor: '#ffff99'}}>Registrarse</button>
+        </p>
     </div>
   );
 };

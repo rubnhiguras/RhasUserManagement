@@ -80,13 +80,13 @@ public class UserService {
                         new DTO.RoleResponse(
                                 role.getId(),
                                 role.getName(),
-                                new DTO.ContextResponse(role.getContext().getId(), role.getName(), role.getDescription()),
+                                new DTO.ContextResponse(role.getContext().getId(), role.getContext().getName(), role.getContext().getDescription()),
                                 role.getDescription(),
                                 role.getPermisos().stream().map(permission ->
                                         new DTO.PermissionResponse(
                                                 permission.getId(),
                                                 permission.getName(),
-                                                new DTO.ContextResponse(permission.getContext().getId(), permission.getName(), permission.getDescription()),
+                                                new DTO.ContextResponse(permission.getContext().getId(), permission.getContext().getName(), permission.getContext().getDescription()),
                                                 permission.getDescription()
                                         )
                                 ).collect(Collectors.toSet())
